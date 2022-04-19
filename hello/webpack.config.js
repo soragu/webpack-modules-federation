@@ -8,8 +8,16 @@ const isProduction = process.env.NODE_ENV == 'production'
 const stylesHandler = 'style-loader'
 
 const { VueLoaderPlugin } = require('vue-loader')
+const { ModuleFederationPlugin } = require('webpack').container
 
 const config = {
+  mode: 'development',
+  cache: false,
+  devtool: 'source-map',
+  optimization: {
+    minimize: false,
+  },
+  target: 'web',
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -17,8 +25,19 @@ const config = {
   devServer: {
     open: true,
     host: 'localhost',
+    port: 8081,
   },
   plugins: [
+    // shared module export config
+    new ModuleFederationPlugin({
+      // Group name
+      name: 'HelloApp',
+      // import config
+      remotes: {
+        // name: component path
+        WorldApp: 'WorldApp@http://localhost:8082/worldApp.js',
+      },
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),

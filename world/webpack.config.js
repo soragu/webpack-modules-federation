@@ -2,12 +2,20 @@
 
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { ModuleFederationPlugin } = require('webpack').container
 
 const isProduction = process.env.NODE_ENV == 'production'
 
 const stylesHandler = 'style-loader'
 
 const config = {
+  mode: 'development',
+  cache: false,
+  devtool: 'source-map',
+  optimization: {
+    minimize: false,
+  },
+  target: 'web',
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -15,8 +23,21 @@ const config = {
   devServer: {
     open: true,
     host: 'localhost',
+    port: 8082,
   },
   plugins: [
+    // shared module export config
+    new ModuleFederationPlugin({
+      // Group name
+      name: 'WorldApp',
+      // Exported filename
+      filename: 'worldApp.js',
+      // export config
+      exposes: {
+        // name: component path
+        './World': './src/components/World.jsx',
+      },
+    }),
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),

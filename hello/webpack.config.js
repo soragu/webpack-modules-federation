@@ -32,8 +32,10 @@ const config = {
     new ModuleFederationPlugin({
       // Group name
       name: 'HelloApp',
+      // 导入配置
       // import config
       remotes: {
+        // 导入的应用别名: {name}@{服务器地址}/{filename}
         // name: component path
         WorldApp: 'WorldApp@http://localhost:8082/worldApp.js',
       },

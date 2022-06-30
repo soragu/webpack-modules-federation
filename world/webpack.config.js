@@ -30,10 +30,13 @@ const config = {
     new ModuleFederationPlugin({
       // Group name
       name: 'WorldApp',
+      // 对外提供打包的文件名
       // Exported filename
       filename: 'worldApp.js',
+      // 导出配置
       // export config
       exposes: {
+        // 需要导出的组件
         // name: component path
         './World': './src/components/World.jsx',
       },
